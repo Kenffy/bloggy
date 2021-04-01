@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms" 
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:Bloggy.Views"
+       Title="Bloggy"
+       x:Class="Bloggy.AppShell">
+
+    <!--
+        The overall app visual hierarchy is defined here, along with navigation.
+    
+        https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/
+    -->
+
+    <Shell.Resources>
+        <ResourceDictionary>
+            <Style x:Key="BaseStyle" TargetType="Element">
+                <Setter Property="Shell.BackgroundColor" Value="#FFFEFF" />
+                <Setter Property="Shell.ForegroundColor" Value="Black" />
+                <Setter Property="Shell.TitleColor" Value="Black" />
+                <Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" />
+                <Setter Property="Shell.UnselectedColor" Value="#B4B4BA" />
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource TabBarBackground}" />
+                <!--<Setter Property="Shell.TabBarForegroundColor" Value="{StaticResource TabIconSelected}" />-->
+                <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource TabIconUnselected}" />
+                <Setter Property="Shell.TabBarTitleColor" Value="{StaticResource TabIconSelected}" />
+            </Style>
+            <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
+            <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <TabBar>
+        <!--<Tab Title="Home"
+             Route="HomePage"
+             Shell.NavBarIsVisible="True"
+             Shell.TitleColor="{StaticResource TabIconSelected}"
+             Icon="home.png">
+            <ShellContent
+                ContentTemplate="{DataTemplate local:HomePage}"/>
+        </Tab>
+
+        <Tab Title="Search"
+             Route="SearchPage"
+             Shell.NavBarIsVisible="False"
+             Shell.TitleColor="{StaticResource TabIconSelected}"
+             Icon="search.png">
+            <ShellContent
+                ContentTemplate="{DataTemplate local:SearchPage}"/>
+        </Tab>
+
+        <Tab Title="Posts"
+             Route="PostPage"
+             Shell.NavBarIsVisible="True"
+             Shell.TitleColor="{StaticResource TabIconSelected}"
+             Icon="addpost.png">
+            <ShellContent
+                ContentTemplate="{DataTemplate local:PostPage}"/>
+        </Tab>
+
+        <Tab Title="Settings"
+             Route="Settings"
+             Shell.NavBarIsVisible="True"
+             Shell.TitleColor="{StaticResource TabIconSelected}"
+             Icon="user.png">
+            <ShellContent
+                ContentTemplate="{DataTemplate local:SettingsPage}"/>
+        </Tab>-->
+
+        <ShellContent Title="Home" Icon="home.png" 
+                      Shell.TitleColor="{StaticResource TabIconSelected}"
+                      Route="HomePage" ContentTemplate="{DataTemplate local:HomePage}" />
+        <ShellContent Title="Search" Icon="search.png" 
+                      Shell.TitleColor="{StaticResource TabIconSelected}"
+                      Route="SearchPage" ContentTemplate="{DataTemplate local:SearchPage}" />
+        <ShellContent Title="Post" Icon="addpost.png" 
+                      Shell.TitleColor="{StaticResource TabIconSelected}"
+                      Route="PostPage" ContentTemplate="{DataTemplate local:PostPage}" />
+        <ShellContent Title="Settings" Icon="user.png" 
+                      Shell.TitleColor="{StaticResource TabIconSelected}"
+                      Route="Settings" ContentTemplate="{DataTemplate local:SettingsPage}" />
+        <!--<ShellContent Title="About" Icon="tab_about.png" Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />-->
+    </TabBar>
+
+    <!--
+        If you would like to navigate to this content you can do so by calling
+        await Shell.Current.GoToAsync("//LoginPage");
+    -->
+    <ShellContent Route="LoginPage" Shell.FlyoutBehavior="Disabled" ContentTemplate="{DataTemplate local:LoginPage}" />
+    <ShellContent Route="ImagePage" Shell.FlyoutBehavior="Disabled" ContentTemplate="{DataTemplate local:ImagePage}" />
+    <ShellContent Route="PostDetailPage" Shell.FlyoutBehavior="Disabled" ContentTemplate="{DataTemplate local:PostDetailPage}" />
+
+
+</Shell>

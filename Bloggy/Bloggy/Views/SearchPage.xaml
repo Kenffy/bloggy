@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:control="clr-namespace:Bloggy.Controls"
+             x:Class="Bloggy.Views.SearchPage">
+
+    <Shell.SearchHandler>
+        <control:BloggySearchHandler Placeholder="Enter search term"
+                                      ShowsResults="true" />
+    </Shell.SearchHandler>
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Welcome to Search"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
