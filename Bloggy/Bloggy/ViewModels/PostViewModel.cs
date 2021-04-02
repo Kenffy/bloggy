@@ -110,11 +110,11 @@ namespace Bloggy.ViewModels
 
             var msg = "Do you really want to delete this post?";
             var result = await Application.Current.MainPage.DisplayAlert("DELETE ALERT", msg, "Yes", "No");
-            if (result == true && SelectedPost != null)
+            if (result == true)
             {
                 try
                 {
-                    await BloggyServices.DeletePostAsync(SelectedPost);
+                    await BloggyServices.DeletePostAsync(post);
                     await Application.Current.MainPage.DisplayAlert("DELETE", "Post successfully deleted", "Alright");
                     pageNumber = 0;
                     PostList.Clear();

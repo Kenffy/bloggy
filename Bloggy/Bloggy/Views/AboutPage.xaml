@@ -12,7 +12,7 @@
 
     <ContentPage.Content>
         <ScrollView>
-            <Grid VerticalOptions="FillAndExpand" BackgroundColor="{StaticResource TextFeatured}">
+            <Grid VerticalOptions="FillAndExpand" BackgroundColor="#ecf0f1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -20,9 +20,8 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!--<Image Source="overlay.png" Aspect="Fill" HeightRequest="300" VerticalOptions="StartAndExpand"/>-->
-                <StackLayout BackgroundColor="{StaticResource Accent}" 
-                             VerticalOptions="StartAndExpand" HeightRequest="350"/>
+                <StackLayout BackgroundColor="White"
+                    VerticalOptions="StartAndExpand" HeightRequest="350"/>
 
                 <StackLayout Orientation="Vertical" Margin="0,20" HorizontalOptions="Center" VerticalOptions="Center">
                     <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
@@ -43,13 +42,14 @@
                         </StackLayout.GestureRecognizers>
                     </StackLayout>
                     <Label x:Name="lbBlogName" Text="{Binding CurrentUser.Name}"
-                           TextColor="{StaticResource TextFeatured}" FontSize="30" HorizontalOptions="Center"/>
+                           TextColor="{StaticResource TextPrimary}" FontSize="30" HorizontalOptions="Center"/>
                     <Label x:Name="lbEmail" Text="{Binding CurrentUser.Email}"
-                           TextColor="{StaticResource TextFeatured}" FontSize="15" HorizontalOptions="Center"/>
+                           TextColor="{StaticResource TextPrimary}" FontSize="15" HorizontalOptions="Center"/>
                 </StackLayout>
 
                 <Frame Grid.Row="1" HasShadow="True" CornerRadius="10" Margin="20,-40,20,0" 
-                       Padding="0" HeightRequest="120" VerticalOptions="Start">
+                       Padding="0" HeightRequest="120" VerticalOptions="Start"
+                       BorderColor="{StaticResource Accent}">
                     <Grid HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -57,26 +57,26 @@
                         </Grid.ColumnDefinitions>
                         <StackLayout Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
                             <StackLayout Spacing="7" HorizontalOptions="CenterAndExpand">
-                                <Label Text="Posts" TextColor="{StaticResource Accent}" FontSize="20" 
+                                <Label Text="Posts" TextColor="{StaticResource TextPrimary}" FontSize="20" 
                                        FontAttributes="Bold" HorizontalOptions="Center">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer x:Name="OnPosts" Command="{Binding OnPostsCommand}"/>
                                     </Label.GestureRecognizers>
                                 </Label>
                                 <Label x:Name="lbNumPosts" Text="{Binding CurrentUser.NumPosts}"
-                                       TextColor="{StaticResource Accent}" FontSize="15" HorizontalOptions="Center"/>
+                                       TextColor="{StaticResource TextPrimary}" FontSize="15" HorizontalOptions="Center"/>
                             </StackLayout>
                         </StackLayout>
                         <StackLayout Grid.Column="1" Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
                             <StackLayout Spacing="7" HorizontalOptions="CenterAndExpand">
-                                <Label Text="Members" TextColor="{StaticResource Accent}" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center">
+                                <Label Text="Members" TextColor="{StaticResource TextPrimary}" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer x:Name="OnMembers" Command="{Binding OnMemberCommand}"/>
                                     </Label.GestureRecognizers>
                                 </Label>
 
                                 <Label x:Name="lbMembers" Text="{Binding CurrentUser.NumMembers}"
-                                       TextColor="{StaticResource Accent}" FontSize="15" HorizontalOptions="Center"/>
+                                       TextColor="{StaticResource TextPrimary}" FontSize="15" HorizontalOptions="Center"/>
                             </StackLayout>
                         </StackLayout>
                     </Grid>
@@ -90,25 +90,16 @@
                         <Label Text="Description:" TextColor="{StaticResource Accent}"
                                FontSize="20" FontAttributes="Bold" Margin="0,10"/>
                         <Label x:Name="lbDescription" FontSize="Medium" 
-                               Text="{Binding CurrentUser.Description}"/>
+                               Text="{Binding CurrentUser.Description}"
+                               TextColor="{StaticResource TextPrimary}"/>
                     </StackLayout>
 
                     <StackLayout>
                         <Label Text="Version:" TextColor="{StaticResource Accent}"
                                FontSize="20" FontAttributes="Bold" Margin="0,5"/>
-                        <Label x:Name="lbVersion" Text="{Binding Version}" FontSize="Medium"/>
+                        <Label x:Name="lbVersion" Text="{Binding Version}" 
+                               FontSize="Medium" TextColor="{StaticResource TextPrimary}"/>
                     </StackLayout>
-
-                    <!--<StackLayout Margin="0,10">
-                        <Label Text="Privacy Policy" TextColor="{StaticResource TextBlueFeatured}" 
-                               FontSize="Medium" VerticalOptions="Center" Margin="0,5"/>
-                        <Label Text="Terms of use" TextColor="{StaticResource TextBlueFeatured}" 
-                               FontSize="Medium" VerticalOptions="Center" Margin="0,5"/>
-                        <Label Text="Website" TextColor="{StaticResource TextBlueFeatured}" 
-                               FontSize="Medium" VerticalOptions="Center" Margin="0,5"/>
-                        <Label Text="Rate the application" TextColor="{StaticResource TextBlueFeatured}" 
-                               FontSize="Medium" VerticalOptions="Center" Margin="0,5"/>
-                    </StackLayout>-->
 
                     <StackLayout>
                         <TableView Intent="Settings" HeightRequest="430"

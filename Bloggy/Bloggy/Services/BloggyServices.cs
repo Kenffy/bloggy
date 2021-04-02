@@ -101,24 +101,23 @@ namespace Bloggy.Services
             var client = new FirebaseClient(BloggyConstant.ConnString,
                 new FirebaseOptions { AuthTokenAsyncFactory = () => Task.FromResult(token.FirebaseToken) });
 
-            var member = (await client.Child("Members")
-            .OnceAsync<Member>()).FirstOrDefault
-            (a => a.Object.Role == Constant.AdminRole);
+            var bloggyInfos = (await client.Child("Members").OnceAsync<Member>())
+                .Select(member => new MemberDetail
+                {
+                    Id = member.Object.Id,
+                    Role = member.Object.Role,
+                    Name = member.Object.Name,
+                    Avatar = member.Object.Avatar,
+                    AvatarColor = member.Object.AvatarColor,
+                    Email = member.Object.Email,
+                    Description = member.Object.Description,
+                    ProfileImage = member.Object.ProfileImage,
+                    PhoneNumber = member.Object.PhoneNumber,
+                    NumPosts = member.Object.NumPosts,
+                    NumMembers = member.Object.NumMembers
+                }).Where(a => a.Role == Constant.AdminRole).FirstOrDefault();
 
-            return new MemberDetail()
-            {
-                Id = member.Object.Id,
-                Role = member.Object.Role,
-                Name = member.Object.Name,
-                Avatar = member.Object.Avatar,
-                AvatarColor = member.Object.AvatarColor,
-                Email = member.Object.Email,
-                Description = member.Object.Description,
-                ProfileImage = member.Object.ProfileImage,
-                PhoneNumber = member.Object.PhoneNumber,
-                NumPosts = member.Object.NumPosts,
-                NumMembers = member.Object.NumMembers
-            };
+            return bloggyInfos;
         }
         public static async Task<MemberDetail> GetAuthMemberAsync()
         {
@@ -128,24 +127,23 @@ namespace Bloggy.Services
             var client = new FirebaseClient(BloggyConstant.ConnString,
                 new FirebaseOptions { AuthTokenAsyncFactory = () => Task.FromResult(token.FirebaseToken) });
 
-            var member = (await client.Child("Members")
-            .OnceAsync<Member>()).FirstOrDefault
-            (a => a.Object.Email == user.Email);
+            var authUser = (await client.Child("Members").OnceAsync<Member>())
+                .Select(member => new MemberDetail
+                {
+                    Id = member.Object.Id,
+                    Role = member.Object.Role,
+                    Name = member.Object.Name,
+                    Avatar = member.Object.Avatar,
+                    AvatarColor = member.Object.AvatarColor,
+                    Email = member.Object.Email,
+                    Description = member.Object.Description,
+                    ProfileImage = member.Object.ProfileImage,
+                    PhoneNumber = member.Object.PhoneNumber,
+                    NumPosts = member.Object.NumPosts,
+                    NumMembers = member.Object.NumMembers
+                }).Where(a => a.Email == user.Email).FirstOrDefault();
 
-            return new MemberDetail()
-            {
-                Id = member.Object.Id,
-                Role = member.Object.Role,
-                Name = member.Object.Name,
-                Avatar = member.Object.Avatar,
-                AvatarColor = member.Object.AvatarColor,
-                Email = member.Object.Email,
-                Description = member.Object.Description,
-                ProfileImage = member.Object.ProfileImage,
-                PhoneNumber = member.Object.PhoneNumber,
-                NumPosts = member.Object.NumPosts,
-                NumMembers = member.Object.NumMembers
-            };
+            return authUser;
         }
         public static async Task DeleteMemberAsync(Member model)
         {
@@ -208,6 +206,7 @@ namespace Bloggy.Services
                 Title = model.Title,
                 Body = model.Body,
                 CreatedAt = DateTime.Now,
+                Likes = ",",
                 PostImage = ""
             };
 
@@ -225,7 +224,7 @@ namespace Bloggy.Services
                     (a => a.Object.Role == Constant.AdminRole);
 
             var user = toUpdateUser.Object;
-            user.NumPosts = await GetNumPostsAsync();
+            user.NumPosts += 1; // await GetNumPostsAsync();
 
             await client.Child("Members").Child(toUpdateUser.Key).PutAsync(user);
         }
@@ -235,74 +234,33 @@ namespace Bloggy.Services
             var client = new FirebaseClient(BloggyConstant.ConnString,
                 new FirebaseOptions { AuthTokenAsyncFactory = () => Task.FromResult(token.FirebaseToken) });
 
-            var post = (await client.Child("Posts")
-            .OnceAsync<Post>()).FirstOrDefault
-            (a => a.Object.Id == postId);
-
             var member = (await client.Child("Members")
                     .OnceAsync<Member>()).FirstOrDefault
                     (a => a.Object.Role == Constant.AdminRole);
 
-            var postDetail = new PostDetail();
-            if (!string.IsNullOrEmpty(post.Object.Body))
-            {
-                postDetail.Id = post.Object.Id;
-                postDetail.Title = post.Object.Title;
-                postDetail.Body = post.Object.Body;
-                postDetail.CreatedAt = post.Object.CreatedAt;
-                postDetail.PostedAt = Constant.GetTimeMessage(post.Object.CreatedAt);
-                postDetail.PostImage = post.Object.PostImage;
-                postDetail.ProfileImage = member.Object.ProfileImage;
-                postDetail.BloggyName = member.Object.Name;
-                postDetail.Avatar = member.Object.Avatar;
-                postDetail.AvatarColor = member.Object.AvatarColor;
-                postDetail.NumLikes = await GetNumLikeByPostId(post.Object.Id);
-                postDetail.IsLikedByMe = await IsPostLikedByMe(post.Object.Id);
-                postDetail.NumComments = await GetNumCommentByPostIdAsync(post.Object.Id);
-                postDetail.Details = postDetail.NumLikes.ToString() + " Like(s)    " + postDetail.NumComments.ToString() + " Comment(s)";
+            var post = (await client.Child("Posts").OnceAsync<Post>())
+                .Select(item => new PostDetail
+                {
+                    Id = item.Object.Id,
+                    Title = item.Object.Title,
+                    Body = item.Object.Body,
+                    CreatedAt = item.Object.CreatedAt,
+                    PostedAt = Constant.GetTimeMessage(item.Object.CreatedAt),
+                    PostImage = item.Object.PostImage,
+                    NumLikes = item.Object.NumLikes,
+                    IsLikedByMe = item.Object.Likes.Contains(member.Object.Id),
+                    LikeImage = item.Object.Likes.Contains(member.Object.Id) ? "liked.png" : "unliked.png",
+                    NumComments = item.Object.NumComments,
+                    Details = item.Object.NumLikes.ToString() + " Like(s)    " + item.Object.NumComments.ToString() + " Comment(s)",
+                    ProfileImage = member.Object.ProfileImage,
+                    BloggyName = member.Object.Name,
+                    Avatar = member.Object.Avatar,
+                    AvatarColor = member.Object.AvatarColor,
+                    InfoComments = (item.Object.NumComments > 0) ? item.Object.NumComments.ToString() + " Comments" : item.Object.NumComments.ToString() + " Comment",
+                    ShortTitle = (!string.IsNullOrEmpty(item.Object.Title) && item.Object.Title.Length > 50) ? item.Object.Title.Substring(0, 50) + "... " : item.Object.Title
+                }).Where(c => c.Id == postId).FirstOrDefault();
 
-                if (!string.IsNullOrEmpty(post.Object.Body) && post.Object.Body.Length > 80)
-                {
-                    postDetail.ShortBody = post.Object.Body.Substring(0, 80) + "... ";
-                }
-                else
-                {
-                    postDetail.ShortBody = post.Object.Body;
-                }
-
-                if (!string.IsNullOrEmpty(post.Object.Title) && post.Object.Title.Length > 50)
-                {
-                    postDetail.ShortTitle = post.Object.Title.Substring(0, 50) + "... ";
-                }
-                else
-                {
-                    postDetail.ShortTitle = post.Object.Title;
-                }
-
-                if (postDetail.IsLikedByMe == true)
-                {
-                    postDetail.LikeImage = "liked.png";
-                }
-                else
-                {
-                    postDetail.LikeImage = "unliked.png";
-                }
-
-                if (postDetail.NumComments > 1)
-                {
-                    postDetail.InfoComments = postDetail.NumComments.ToString() + " Comments";
-                }
-                else if (postDetail.NumComments == 1)
-                {
-                    postDetail.InfoComments = postDetail.NumComments.ToString() + " Comment";
-                }
-                else
-                {
-                    postDetail.InfoComments = "0 Comment";
-                }
-            }
-
-            return postDetail;
+            return post;
         }
         public static async Task<ObservableCollection<PostDetail>> GetAllPostsAsync(int pageNumber, int pageSize)
         {
@@ -322,31 +280,15 @@ namespace Bloggy.Services
                       Title = item.Object.Title,
                       Body = item.Object.Body,
                       CreatedAt = item.Object.CreatedAt,
-                      PostImage = item.Object.PostImage
-                  }).ToList();
+                      PostedAt = Constant.GetTimeMessage(item.Object.CreatedAt),
+                      PostImage = item.Object.PostImage,
+                      NumLikes = item.Object.NumLikes,
+                      IsLikedByMe = item.Object.Likes.Contains(member.Object.Id),
+                      LikeImage = item.Object.Likes.Contains(member.Object.Id) ? "liked.png" : "unliked.png",
+                      NumComments = item.Object.NumComments,
+                      Details = item.Object.NumLikes.ToString() + " Like(s)    " + item.Object.NumComments.ToString() + " Comment(s)"
+                  }).OrderByDescending(m => m.CreatedAt).ToList();
 
-
-            if (posts != null && posts.Count() > 0)
-            {
-                foreach (var post in posts)
-                {
-                    post.PostedAt = Constant.GetTimeMessage(post.CreatedAt);
-                    post.NumLikes = await GetNumLikeByPostId(post.Id);
-                    post.IsLikedByMe = await IsPostLikedByMe(post.Id);
-                    post.NumComments = await GetNumCommentByPostIdAsync(post.Id);
-                    post.Details = post.NumLikes.ToString() + " Like(s)    " + post.NumComments.ToString() + " Comment(s)";
-                    if (post.IsLikedByMe == true)
-                    {
-                        post.LikeImage = "liked.png";
-                    }
-                    else
-                    {
-                        post.LikeImage = "unliked.png";
-                    }
-                }
-            }
-
-            posts = posts.OrderByDescending(m => m.CreatedAt).ToList();
             var filterPosts = posts.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             return new ObservableCollection<PostDetail>(filterPosts);
         }
@@ -368,7 +310,7 @@ namespace Bloggy.Services
                     (a => a.Object.Role == Constant.AdminRole);
 
             var user = toUpdateUser.Object;
-            user.NumPosts = await GetNumPostsAsync();
+            user.NumPosts -= 1; // await GetNumPostsAsync();
 
             await client.Child("Members").Child(toUpdateUser.Key).PutAsync(user);
         }
@@ -445,7 +387,8 @@ namespace Bloggy.Services
             (a => a.Object.Id == model.PostId);
 
             var post = toUpdatePost.Object;
-            post.NumComments = await GetNumCommentByPostIdAsync(model.PostId);
+            post.NumComments += 1;
+            //post.NumComments = await GetNumCommentByPostIdAsync(model.PostId);
             await client.Child("Posts").Child(toUpdatePost.Key).PutAsync(post);
 
         }
@@ -489,6 +432,7 @@ namespace Bloggy.Services
 
             return new ObservableCollection<CommentDetail>(commentList);
         }
+
         public static async Task<ObservableCollection<CommentDetail>> GetCommentsByPostIdAsync(Guid postId)
         {
             FirebaseAuthLink token = await GetRefreshLink();

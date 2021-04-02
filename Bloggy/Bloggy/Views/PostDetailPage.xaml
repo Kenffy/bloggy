@@ -31,7 +31,8 @@
 
                             <StackLayout VerticalOptions="CenterAndExpand">
                                 <Label x:Name="lbBloggyName" Text="{Binding CurrentPost.BloggyName}"
-                                    FontSize="Medium" FontAttributes="Bold"/>
+                                    FontSize="Medium" FontAttributes="Bold"
+                                       TextColor="{StaticResource TextPrimary}"/>
                                 <Label x:Name="lbPostedAt" 
                                        Text="{Binding CurrentPost.PostedAt}"/>
                             </StackLayout>
@@ -49,19 +50,21 @@
 
                         <StackLayout Grid.Row="1">
                             <Label Margin="10" x:Name="lbPostTitle" Text="{Binding CurrentPost.Title}"
-                                   FontSize="22" FontFamily="Century Gothic" FontAttributes="Bold"/>
+                                   FontSize="22" FontFamily="Century Gothic" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}"/>
                             <Label Margin="10" x:Name="lbPostBody" 
                                    Text="{Binding CurrentPost.Body}"
                                    FontSize="Medium" 
+                                   TextColor="{StaticResource TextPrimary}"
                                    FontFamily="Century Gothic" 
                                    VerticalOptions="CenterAndExpand"
-                                   HorizontalOptions="CenterAndExpand"
-                                   LineBreakMode="WordWrap"/>
+                                   HorizontalOptions="StartAndExpand"
+                                   />
                         </StackLayout>
                         <!--Media-->
                         <StackLayout Grid.Row="2">
                             <ff:CachedImage x:Name="PostImage" Source="{Binding CurrentPost.PostImage}" 
-                                            Margin="1" Aspect="AspectFill">
+                                            Margin="1" Aspect="AspectFill" HeightRequest="230">
                                 <ff:CachedImage.GestureRecognizers>
                                     <TapGestureRecognizer x:Name="OnDisplayImage" Command="{Binding DisplayImageCommand}"/>
                                 </ff:CachedImage.GestureRecognizers>
@@ -76,6 +79,7 @@
                             <Label x:Name="lbInfoComments" 
                                    Text="{Binding CurrentPost.InfoComments}"
                                    FontSize="Medium" Padding="10"
+                                   TextColor="{StaticResource TextPrimary}"
                                    VerticalOptions="Center"
                                    HorizontalOptions="StartAndExpand"/>
 

@@ -82,7 +82,7 @@
                 </Grid>
 
                 <StackLayout>
-                    <TableView Intent="Settings" HeightRequest="200"
+                    <TableView Intent="Settings" HeightRequest="300"
                                VerticalOptions="EndAndExpand">
                         <TableRoot>
                             <TableSection>

@@ -63,7 +63,8 @@
                                             <StackLayout Grid.Row="0">
                                                 <Label Text="{Binding Title}" FontAttributes="Bold" 
                                                        FontSize="18" MaxLines="2"
-                                                       LineBreakMode="TailTruncation"/>
+                                                       LineBreakMode="TailTruncation"
+                                                       TextColor="{StaticResource TextPrimary}"/>
                                                 <Label Text="{Binding PostedAt}"/>
                                             </StackLayout>
 

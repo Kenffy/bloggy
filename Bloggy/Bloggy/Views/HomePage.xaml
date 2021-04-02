@@ -49,6 +49,7 @@
                                         <StackLayout Grid.Row="0">
                                             <Label Text="{Binding Title}" 
                                                    FontAttributes="Bold" 
+                                                   TextColor="{StaticResource TextPrimary}"
                                                    FontSize="18" MaxLines="2"
                                                    LineBreakMode="TailTruncation"/>
                                             <Label Text="{Binding PostedAt}"/>
@@ -65,10 +66,14 @@
                                                     </Grid.ColumnDefinitions>
                                                     <Image Source="{Binding LikeImage}" VerticalOptions="CenterAndExpand"
                                                                        HeightRequest="20" Aspect="AspectFit" Grid.Column="0"/>
-                                                    <Label Text="{Binding NumLikes}" Grid.Column="1" VerticalOptions="CenterAndExpand"/>
+                                                    <Label Text="{Binding NumLikes}" Grid.Column="1" 
+                                                           VerticalOptions="CenterAndExpand"
+                                                           TextColor="{StaticResource TextPrimary}"/>
                                                     <Image Source="comment.png" VerticalOptions="CenterAndExpand" Margin="15,0,0,0"
                                                                        HeightRequest="20" Aspect="AspectFit" Grid.Column="2"/>
-                                                    <Label Text="{Binding NumComments}" Grid.Column="3" VerticalOptions="CenterAndExpand"/>
+                                                    <Label Text="{Binding NumComments}" Grid.Column="3" 
+                                                           VerticalOptions="CenterAndExpand"
+                                                           TextColor="{StaticResource TextPrimary}"/>
                                                 </Grid>
                                             </StackLayout>
                                         </StackLayout>
@@ -78,7 +83,7 @@
 
                                 <StackLayout Grid.Column="1" Margin="5">
                                     <Frame CornerRadius="5" Padding="-1" VerticalOptions="CenterAndExpand">
-                                       <ff:CachedImage Source="{Binding PostImage}" Aspect="AspectFill" HeightRequest="100"/>
+                                        <ff:CachedImage Source="{Binding PostImage}" Aspect="AspectFill" HeightRequest="100"/>
                                     </Frame>
                                 </StackLayout>
                             </Grid>
